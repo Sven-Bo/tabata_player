@@ -1,311 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tabata Player</title>
     <link rel="icon" type="image/png" href="https://filedn.eu/lV0RcQd1Re5jQr5XL93Ntwm/Tabata_Music/favicon.png">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #1e1e1e, #272727);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            color: #fff;
-            text-align: center;
-        }
-
-        .container {
-            background: rgba(0, 0, 0, 0.85);
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-            max-width: 500px;
-            width: 90%;
-            opacity: 0;
-            /* Fade-in animation */
-        }
-
-        h1 {
-            font-size: 24px;
-            font-weight: 500;
-        }
-
-        select {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            font-size: 16px;
-            background: #333;
-            color: #fff;
-            appearance: none;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        select:hover {
-            background: #444;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            width: 50px;
-            height: 50px;
-            border: none;
-            border-radius: 50%;
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.2s ease-in-out;
-        }
-
-        .btn:active {
-            transform: scale(0.9);
-        }
-
-        .btn-play {
-            background: #ff3d00;
-            color: #fff;
-        }
-
-        .btn-play:hover {
-            background: #e63600;
-        }
-
-        .btn-pause {
-            background: #555;
-            color: #fff;
-        }
-
-        .btn-pause:hover {
-            background: #444;
-        }
-
-        #nowPlaying {
-            margin-bottom: 20px;
-            font-size: 18px;
-            font-weight: 500;
-        }
-
-        .progress-container {
-            width: 100%;
-            height: 10px;
-            background: #444;
-            border-radius: 6px;
-            overflow: hidden;
-            margin-bottom: 10px;
-        }
-
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background: #ff3d00;
-            transition: width 0.2s;
-        }
-
-        .time {
-            font-size: 14px;
-            color: #aaa;
-            margin-bottom: 20px;
-        }
-
-        .volume-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .volume-container input[type="range"] {
-            width: 100%;
-        }
-
-        /* Animation */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(15px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
-
-<body>
+<body class="dark-theme">
     <div class="container">
-        <h1>Tabata Player</h1>
-        <select id="trackSelect">
-            <option value="">Select a track</option>
-        </select>
-        <div class="controls">
-            <button class="btn btn-play" id="playBtn">
-                <span class="material-icons">play_arrow</span>
-            </button>
-            <button class="btn btn-pause" id="pauseBtn">
-                <span class="material-icons">pause</span>
-            </button>
+        <div class="header">
+            <h1>Tabata Player</h1>
+            <button id="themeToggleBtn" class="theme-toggle material-icons-round">light_mode</button>
         </div>
+
+        <div class="track-select-container">
+            <select id="trackSelect">
+                <option value="">Select a track</option>
+            </select>
+            <span class="select-arrow material-icons-round">arrow_drop_down</span>
+        </div>
+
         <div id="nowPlaying">Now Playing: None</div>
-        <div class="progress-container">
-            <div class="progress-bar" id="progressBar"></div>
+
+        <div id="progressContainer" class="progress-container">
+            <div id="progressBar" class="progress-bar"></div>
         </div>
+
         <div class="time">
             <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
         </div>
-        <div class="volume-container">
-            <label for="volumeSlider">Volume:</label>
-            <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1">
+
+        <div class="controls">
+            <button id="playBtn" class="btn btn-play">
+                <span class="material-icons-round">play_arrow</span>
+            </button>
+            <button id="pauseBtn" class="btn btn-pause">
+                <span class="material-icons-round">pause</span>
+            </button>
+            <button id="stopBtn" class="btn btn-stop">
+                <span class="material-icons-round">stop</span>
+            </button>
+            <button id="randomBtn" class="btn btn-random">
+                <span class="material-icons-round">shuffle</span>
+            </button>
         </div>
-        <audio id="audioPlayer"></audio>
+
+        <div class="volume-container">
+            <span id="volumeIcon" class="material-icons-round">volume_up</span>
+            <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="0.01" value="1">
+        </div>
+        
+        <div class="footer">
+            <p>Made with <span class="heart">❤️</span> by Sven | <a href="https://pythonandvba.com" target="_blank">pythonandvba.com</a> 🚀</p>
+        </div>
     </div>
 
-    <script>
-        // GSAP Animation for Smooth Fade-in
-        gsap.to(".container", { opacity: 1, duration: 1, ease: "power2.out" });
+    <div class="confetti-container"></div>
 
-        const baseUrl = "https://filedn.eu/lV0RcQd1Re5jQr5XL93Ntwm/Tabata_Music/";
-        const tracks = [ 
-            "2 Fabiola - Lift U Up (1)_tabata.mp3", 
-            "ABCDEFU (Age Pee Remix)_tabata.mp3", 
-            "Alice - Per Elisa_tabata.mp3", 
-            "Alice - Una Notte Speciale_tabata.mp3", 
-            "Alles wird gut_tabata.mp3", 
-            "Better When Youre Gone_tabata.mp3", 
-            "CHARLY LOWNOISE & RE-STYLE feat. RICARDO MORENO - City Streets (Extended Mix)_tabata.mp3", 
-            "Chris Brown - Yeah 3x (HBz Bounce Remix)_tabata.mp3", 
-            "Danza Kuduro (Norda, Master Blaster, EmJo Remix Radio Edit)_tabata.mp3", 
-            "Das geht ab - Wir feiern die ganze Nacht - Remix_tabata.mp3", 
-            "Die Atzen, Norda & Master Blaster feat. DJ EmJo & DJ Basti - Das geht ab Remix (Official Visualizer)_tabata.mp3", 
-            "Die Flippers - Wir sagen Danke schön [40 Jahre] (HBz u0026 Raphael Maier Remix)_tabata.mp3", 
-            "Durch den Monsun_tabata.mp3", 
-            "Froh & Munter_tabata.mp3", 
-            "GAYLE - abcdefu (HBz u0026 Raphael Maier Remix)_tabata.mp3", 
-            "GOETHE - HARRIS u0026 FORD EDIT - 2 ENGEL u0026 CHARLIE_tabata.mp3", 
-            "Haddaway_tabata.mp3", 
-            "Halo_tabata.mp3", 
-            "Harris u0026 Ford - Survivors_tabata.mp3", 
-            "Harris u0026 Ford - Turn Back Time  (Official Video)_tabata.mp3", 
-            "Harris u0026 Ford feat. Addnfahrer - Hard, Style u0026 Volksmusik_tabata.mp3", 
-            "HARRIS u0026 FORD feat. FiNCH - Freitag Samstag (Official Video HD)_tabata.mp3", 
-            "Harris u0026 Ford x 2 Engel u0026 Charlie - Amsterdam (Official Video)_tabata.mp3", 
-            "Harris u0026 Ford x DJ Gollum - Numb_tabata.mp3", 
-            "Harris u0026 Ford x Faustix - Hollywood (feat. PollyAnna) [Official Audio]_tabata.mp3", 
-            "HARRIS u0026 FORD x FiNCH - MAKE THE WORLD RAVE AGAIN_tabata.mp3", 
-            "HARRiS u0026 FORD x FiNCH - NACHBARN_tabata.mp3", 
-            "Harris u0026 Ford x ItaloBrothers - Weekend Party (Official Lyrics Video)_tabata.mp3", 
-            "Harris u0026 Ford x Jebroer - Mutter (Official Video HD)_tabata.mp3", 
-            "Harris u0026 Ford x Maxim Schunk - Lost in You (Official Video)_tabata.mp3", 
-            "Harris u0026 Ford x Outsiders - Irrenhaus (Official Video 4K)_tabata.mp3", 
-            "Harris u0026 Ford x Sound Rush - Died In Your Arms (Reloaded)_tabata.mp3", 
-            "Harris u0026 Ford x Xillions - Won’t Forget (Official Lyrics Video)_tabata.mp3", 
-            "HBz - Gästeliste +1 (Official Video 4K)_tabata.mp3", 
-            "HBz - King Kong (Official Video)_tabata.mp3", 
-            "HBz x THOVI - WIR MACHEN RUM_tabata.mp3", 
-            "Julian Sommer - Dicht im Flieger (Harris u0026 Ford Remix)_tabata.mp3", 
-            "Kerstin Ott - Megamix_tabata.mp3", 
-            "Looking for Freedom_tabata.mp3", 
-            "Masterboy - Megamix_tabata.mp3", 
-            "Nathan Evans - Drunken Sailor (Harris u0026 Ford Remix)_tabata.mp3", 
-            "Oimara - Wackelkontakt (Darrix Hardstyle Remix)_tabata.mp3", 
-            "Ok Without You_tabata.mp3", 
-            "Olivia (Harris & Ford Remix) - Die Zipfelbuben_tabata.mp3", 
-            "Olivia (Harris u0026 Ford Remix) - Die Zipfelbuben_tabata.mp3", 
-            "Roland Kaiser - Dich zu lieben_tabata.mp3", 
-            "Salsa Tequila (Damn-R Remix)_tabata.mp3", 
-            "Scooter x Harris u0026 Ford – God Save The Rave (Official Video HD)_tabata.mp3", 
-            "SDP x 257ers - Scheiße baut sich nicht von alleine (HBz Remix)  Videoclip_tabata.mp3", 
-            "Spacekid - Moi... Lolita_tabata.mp3", 
-            "Technotronic - Megamix_tabata.mp3", 
-            "Tream - 3er BMW (Harris u0026 Ford Remix)_tabata.mp3", 
-            "Tream - Lebenslang (HBz Remix)  Videoclip_tabata.mp3", 
-            "Tream x HBz - Goldmarie (Official Lyric Live Video)_tabata.mp3", 
-            "Udo Jürgens - Griechischer Wein (HBz Hard-Bounce Remix)_tabata.mp3", 
-            "Unendlichkeit (Norda, Master Blaster, Emjo Extended)_tabata.mp3", 
-            "W&W x AXMO ft. SONJA - Rave Love (Official Video)_tabata.mp3", 
-            "W&W x AXMO ft. SONJA - StarShine (I Don't Want This Night To End) [Official Music Video]_tabata.mp3", 
-            "We Are Young_tabata.mp3", 
-            "Without You_tabata.mp3", 
-            "Wu0026W x HARRIS u0026 FORD x SPECIAL D. - COME WITH ME (Official Video)_tabata.mp3", 
-        ]; 
+    <audio id="audioPlayer"></audio>
 
-
-        const trackSelect = document.getElementById("trackSelect");
-        const playBtn = document.getElementById("playBtn");
-        const pauseBtn = document.getElementById("pauseBtn");
-        const nowPlaying = document.getElementById("nowPlaying");
-        const audioPlayer = document.getElementById("audioPlayer");
-        const progressBar = document.getElementById("progressBar");
-        const currentTimeEl = document.getElementById("currentTime");
-        const durationEl = document.getElementById("duration");
-        const volumeSlider = document.getElementById("volumeSlider");
-
-        tracks.forEach(track => {
-            const option = document.createElement("option");
-            option.value = track;
-            option.textContent = track.replace("_tabata.mp3", "");
-            trackSelect.appendChild(option);
-        });
-
-        function formatTime(seconds) {
-            const mins = Math.floor(seconds / 60);
-            const secs = Math.floor(seconds % 60);
-            return mins + ":" + (secs < 10 ? "0" : "") + secs;
-        }
-
-        playBtn.addEventListener("click", () => {
-            const selected = trackSelect.value;
-            if (!selected) return;
-            const trackUrl = baseUrl + encodeURI(selected);
-            if (audioPlayer.src !== trackUrl) {
-                audioPlayer.src = trackUrl;
-                nowPlaying.textContent = "Now Playing: " + selected.replace("_tabata.mp3", "");
-            }
-            audioPlayer.play();
-        });
-
-        pauseBtn.addEventListener("click", () => {
-            audioPlayer.pause();
-        });
-
-        volumeSlider.addEventListener("input", () => {
-            audioPlayer.volume = volumeSlider.value;
-        });
-
-        audioPlayer.addEventListener("timeupdate", () => {
-            if (audioPlayer.duration) {
-                const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
-                progressBar.style.width = progress + "%";
-                currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
-            }
-        });
-
-        audioPlayer.addEventListener("ended", () => {
-            nowPlaying.textContent = "Now Playing: None";
-            progressBar.style.width = "0%";
-            currentTimeEl.textContent = "0:00";
-        });
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="js/tracks.js"></script>
+    <script src="js/confetti.js"></script>
+    <script src="js/tabata-timer.js"></script>
+    <script src="js/app.js"></script>
 </body>
-
 </html>
