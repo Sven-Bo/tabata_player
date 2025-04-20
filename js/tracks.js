@@ -1,6 +1,6 @@
 // Track list for Tabata Player
 const tracks = [
-    "LEA - Wohin Willst Du (Kuba Hardtechno Music)_tabata.mp3,
+    "LEA - Wohin Willst Du (Kuba Hardtechno Music)_tabata.mp3",
     "2 Fabiola - Lift U Up (1)_tabata.mp3", 
     "ABCDEFU (Age Pee Remix)_tabata.mp3", 
     "Alice - Per Elisa_tabata.mp3", 
